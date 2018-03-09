@@ -1,13 +1,21 @@
 import os
+from pyspark import SparkContext
+import fnmatch as fn
 
-def getFile( filename ):
-    script_dir = os.path.dirname(__file__)
-    relative_path = 'data/' + filename
-    absolute_path = os.path.join(script_dir, relative_path)
-
-    filehandle = open(absolute_path)
-    print(filehandle.read())
-    filehandle.close()
+# Get the file path for a csv using the ID number of the student
+def getPathFromID(studentID):
+    fileID = 'P'
+    if studentID < 10:
+        fileID += '0'
+    fileID = fileID + str(studentID) + '_Emotion'
+    path = None
+    for file in os.listdir('data/'):
+        if fn.fnmatch(file, fileID+'*.csv'):
+            path = 'data/'+file
+            break
+    return path
 
 if __name__ == '__main__':
-    getFile('P01_Emotion.csv')
+    print(getPathFromID(1))
+    print(getPathFromID(22))
+    print(getPathFromID(99))
