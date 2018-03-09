@@ -8,7 +8,7 @@ def get_path_from_id(student_id):
     Get the relative path for a specific student's csv.
 
     :param student_id: ID number of the csv file.
-    :return: The relative path of the csv file, None if file doesn't exist.
+    :return: The path object for the csv file, None if file doesn't exist.
     """
     file_id = 'P'
     if student_id < 10:
@@ -25,11 +25,28 @@ def get_path_from_id(student_id):
         return FilePath(path)
 
 
+def get_path_from_filename(filename):
+    """
+    Get the relative path for a specific student's csv.
+
+    :param filename: Full name of the csv file.
+    :return: The path object for the csv file, None if file doesn't exist.
+    """
+    full_path = 'data/'+filename
+    if "Adjusted" in filename:
+        return FilePath(full_path, True)
+    return FilePath(full_path)
+
+
 class FilePath:
     """ Class to represent path for student data file"""
     def __init__(self, path, adjusted=False):
         self.path = path
         self.adj = adjusted
+
+
+# def acquire_dataframe():
+
 
 
 if __name__ == '__main__':
