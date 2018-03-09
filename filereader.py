@@ -19,10 +19,20 @@ def get_path_from_id(student_id):
         if fn.fnmatch(file, file_id + '*.csv'):
             path = 'data/' + file
             break
-    return path
+    if path is not None:
+        if "Adjusted" in path:
+            return FilePath(path, True)
+        return FilePath(path)
+
+
+class FilePath:
+    """ Class to represent path for student data file"""
+    def __init__(self, path, adjusted=False):
+        self.path = path
+        self.adj = adjusted
 
 
 if __name__ == '__main__':
-    print(get_path_from_id(1))
-    print(get_path_from_id(22))
+    print(get_path_from_id(1).adj)
+    print(get_path_from_id(22).adj)
     print(get_path_from_id(99))
