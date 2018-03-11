@@ -1,5 +1,5 @@
 import os
-from pyspark import SparkContext
+from pyspark.sql import SQLContext
 import fnmatch as fn
 
 
@@ -42,14 +42,16 @@ class FilePath:
     """ Class to represent path for student data file"""
     def __init__(self, path, adjusted=False):
         self.path = path
-        self.adj = adjusted
+        self.is_adjusted = adjusted
 
 
-# def acquire_dataframe():
-
+def convert_to_dataframe(filepath):
+    #Check if file is adjusted, if so do extra processing to normalize the adjustments for time
+    #If not adjusted, continue
 
 
 if __name__ == '__main__':
-    print(get_path_from_id(1).adj)
-    print(get_path_from_id(22).adj)
+    print(get_path_from_id(1).path)
+    print(get_path_from_id(22).path)
     print(get_path_from_id(99))
+    print(get_path_from_filename('P01_Emotion.csv').is_adjusted)
