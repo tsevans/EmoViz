@@ -1,6 +1,7 @@
 import os
-from pyspark.sql import SQLContext
+from pyspark.sql import DataFrameReader
 import fnmatch as fn
+import multiprocessing
 
 
 def get_path_from_id(student_id):
@@ -46,12 +47,13 @@ class FilePath:
 
 
 def convert_to_dataframe(filepath):
-    #Check if file is adjusted, if so do extra processing to normalize the adjustments for time
-    #If not adjusted, continue
+    print()
+    #dframe =
 
 
 if __name__ == '__main__':
-    print(get_path_from_id(1).path)
-    print(get_path_from_id(22).path)
-    print(get_path_from_id(99))
-    print(get_path_from_filename('P01_Emotion.csv').is_adjusted)
+    #print(get_path_from_id(1).path)
+    #print(get_path_from_id(22).path)
+    #print(get_path_from_id(99))
+    #print(get_path_from_filename('P01_Emotion.csv').is_adjusted)
+    print(multiprocessing.cpu_count())
