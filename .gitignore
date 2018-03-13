@@ -1,2 +1,4 @@
 data/*
 .idea/*
+derby.log
+metastore_db/*

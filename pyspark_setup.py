@@ -26,5 +26,5 @@ if not os.path.exists(os.path.join(spark_home, 'python/lib/py4j-0.10.4-src.zip')
 sys.path.insert(0, os.path.join(spark_home, 'python/lib/py4j-0.10.4-src.zip'))
 
 with open(os.path.join(spark_home, 'python/pyspark/shell.py')) as f:
-    code = compile(f.read(), os.path.join(spark_home, 'python/pyspark/shell.py'), exec)
+    code = compile(f.read(), os.path.join(spark_home, 'python/pyspark/shell.py'), 'exec')
     exec(code)
