@@ -1,7 +1,7 @@
 import os
-from pyspark.sql import DataFrameReader
+from pyspark.sql import DataFrameReader, SQLContext
 import fnmatch as fn
-import multiprocessing
+from spark_utils import create_local_spark_session
 
 
 def get_path_from_id(student_id):
@@ -47,13 +47,16 @@ class FilePath:
 
 
 def convert_to_dataframe(filepath):
-    print()
-    #dframe =
+    spark_context = create_local_spark_session()
+    sql_context = SQLContext(spark_context)
+    spark_df = sql_context.read.format('com.databricks.spark.csv').options(header='true').load(filepath.path)
+    return spark_df
 
 
 if __name__ == '__main__':
-    #print(get_path_from_id(1).path)
+    path = get_path_from_id(1)
+    df = convert_to_dataframe(path)
+    df.show()
     #print(get_path_from_id(22).path)
     #print(get_path_from_id(99))
     #print(get_path_from_filename('P01_Emotion.csv').is_adjusted)
-    print(multiprocessing.cpu_count())
