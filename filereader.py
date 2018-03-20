@@ -1,7 +1,8 @@
 import os
-from pyspark.sql import DataFrameReader, SQLContext
+from pyspark.sql import SQLContext
 import fnmatch as fn
 from spark_utils import create_local_spark_session
+import pandas as pd
 
 
 def get_path_from_id(student_id):
@@ -46,18 +47,26 @@ class FilePath:
         self.is_adjusted = adjusted
 
 
-def convert_to_dataframe(filepath):
+def csv_to_spark_dataframe(filepath):
     spark_context = create_local_spark_session()
     sql_context = SQLContext(spark_context)
     spark_df = sql_context.read.format('com.databricks.spark.csv').options(header='true').load(filepath.path)
     return spark_df
 
 
+def csv_to_pandas_dataframe(filepath):
+    pandas_df = pd.read_csv(filepath.path)
+    return pandas_df
+
+
+def pandas_to_spark(dataframe):
+    spark_context = create_local_spark_session()
+    return spark_context.createDataFrame(dataframe)
+
+
 if __name__ == '__main__':
     path = get_path_from_id(1)
-    df = convert_to_dataframe(path)
-    print('Dataframe Schema:')
-    df.printSchema()
-    #print(get_path_from_id(22).path)
-    #print(get_path_from_id(99))
-    #print(get_path_from_filename('P01_Emotion.csv').is_adjusted)
+    print(csv_to_pandas_dataframe(path).head())
+    #df = csv_to_spark_dataframe(path)
+    #print('Dataframe Schema:')
+    #df.printSchema()
