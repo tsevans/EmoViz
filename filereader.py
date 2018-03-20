@@ -56,7 +56,8 @@ def convert_to_dataframe(filepath):
 if __name__ == '__main__':
     path = get_path_from_id(1)
     df = convert_to_dataframe(path)
-    df.show()
+    print('Dataframe Schema:')
+    df.printSchema()
     #print(get_path_from_id(22).path)
     #print(get_path_from_id(99))
     #print(get_path_from_filename('P01_Emotion.csv').is_adjusted)
