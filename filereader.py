@@ -1,7 +1,7 @@
 import os
 from pyspark.sql import SQLContext
 import fnmatch as fn
-from spark_utils import create_local_spark_session
+from sparksession import SparkSession
 import pandas as pd
 
 
@@ -47,11 +47,11 @@ class FilePath:
         self.is_adjusted = adjusted
 
 
-def csv_to_spark_dataframe(filepath):
-    spark_context = create_local_spark_session()
-    sql_context = SQLContext(spark_context)
-    spark_df = sql_context.read.format('com.databricks.spark.csv').options(header='true').load(filepath.path)
-    return spark_df
+# def csv_to_spark_dataframe(filepath):
+#     spark_context = create_local_spark_session()
+#     sql_context = SQLContext(spark_context)
+#     spark_df = sql_context.read.format('com.databricks.spark.csv').options(header='true').load(filepath.path)
+#     return spark_df
 
 
 def csv_to_pandas_dataframe(filepath):
@@ -59,9 +59,14 @@ def csv_to_pandas_dataframe(filepath):
     return pandas_df
 
 
-def pandas_to_spark(dataframe):
-    spark_context = create_local_spark_session()
-    return spark_context.createDataFrame(dataframe)
+# def pandas_to_spark(dataframe):
+#     """
+#     Convert a pandas dataframe to a spark dataframe.
+#
+#     :param dataframe: Pandas dataframe instance.
+#     :return: Converted spark dataframe.
+#     """
+#     return spark_context.createDataFrame(dataframe)
 
 
 if __name__ == '__main__':
