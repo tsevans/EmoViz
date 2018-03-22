@@ -17,7 +17,7 @@ def create_local_spark_session():
     return SS.builder.master(master).config(conf=SparkConf()).appName('EmoViz').getOrCreate()
 
 
-class SparkSession(object):
+class SparkSesh(object):
 
     def __init__(self):
         self.spark_sesh = create_local_spark_session()
