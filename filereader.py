@@ -25,6 +25,7 @@ def get_path_from_id(student_id):
         if "Adjusted" in path:
             return FilePath(path, True)
         return FilePath(path)
+    return None
 
 
 def get_path_from_filename(filename):
@@ -35,9 +36,28 @@ def get_path_from_filename(filename):
     :return: The path object for the csv file, None if file doesn't exist.
     """
     full_path = 'data/'+filename
-    if "Adjusted" in filename:
-        return FilePath(full_path, True)
-    return FilePath(full_path)
+    if os.path.exists(full_path):
+        if "Adjusted" in filename:
+            return FilePath(full_path, True)
+        return FilePath(full_path)
+    return None
+
+
+def find_file(identifier):
+    """
+    Wrapper to find a csv file by either id number or full name of file.
+
+    :param identifier: Numerical ID of file or full name of file.
+    :return: File path object corresponding to identifier.
+    """
+    if type(identifier) is int:
+        path = get_path_from_id(identifier)
+    else:
+        path = get_path_from_filename(identifier)
+
+    if path is None:
+        raise ValueError('File not found: %s' % identifier)
+    return path
 
 
 class FilePath:
@@ -48,6 +68,12 @@ class FilePath:
 
 
 def csv_to_spark_dataframe(filepath):
+    """
+    Convert a csv file to a spark dataframe.
+
+    :param filepath: File path object of the csv to convert.
+    :return: Spark dataframe.
+    """
     spark_context = create_local_spark_session()
     sql_context = SQLContext(spark_context)
     spark_df = sql_context.read.format('com.databricks.spark.csv').options(header='true').load(filepath.path)
@@ -55,6 +81,12 @@ def csv_to_spark_dataframe(filepath):
 
 
 def csv_to_pandas_dataframe(filepath):
+    """
+    Convert a csv file to a pandas dataframe.
+
+    :param filepath: File path object of the csv file to convert.
+    :return: Pandas dataframe.
+    """
     pandas_df = pd.read_csv(filepath.path)
     return pandas_df
 
@@ -70,11 +102,12 @@ def csv_to_pandas_dataframe(filepath):
 
 
 if __name__ == '__main__':
-    path = get_path_from_id(1)
-    df = csv_to_spark_dataframe(path)
-    print(type(df))
+    path = find_file(2)
+    print(path.path)
+    # df = csv_to_spark_dataframe(path)
+    # print(type(df))
     # df.printSchema()
-    print(df.count())
+    # print(df.count())
     #df = csv_to_spark_dataframe(path)
     #print('Dataframe Schema:')
     #df.printSchema()
