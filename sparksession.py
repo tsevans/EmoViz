@@ -1,5 +1,6 @@
 from pyspark.sql import SparkSession as SS
 from pyspark.conf import SparkConf
+from pyspark.sql import SQLContext
 import multiprocessing as mp
 
 

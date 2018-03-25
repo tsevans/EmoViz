@@ -60,7 +60,7 @@ def find_file(identifier):
     return path
 
 
-class FilePath:
+class FilePath(object):
     """ Class to represent path for student data file"""
     def __init__(self, path, adjusted=False):
         self.path = path
@@ -99,15 +99,3 @@ def csv_to_pandas_dataframe(filepath):
 #     :return: Converted spark dataframe.
 #     """
 #     return spark_context.createDataFrame(dataframe)
-
-
-if __name__ == '__main__':
-    path = find_file(2)
-    print(path.path)
-    # df = csv_to_spark_dataframe(path)
-    # print(type(df))
-    # df.printSchema()
-    # print(df.count())
-    #df = csv_to_spark_dataframe(path)
-    #print('Dataframe Schema:')
-    #df.printSchema()
