@@ -9,6 +9,9 @@ import graph_animated_plotly as gap
 #         .getOrCreate()
 
 if __name__ == '__main__':
-    csv = fr.find_file(1)
-    df = fr.csv_to_spark_dataframe(csv)
-    gsp.SinglePlot.avg_radar_chart(df, 'testradar')
+    csv_list = [fr.find_file(1), fr.find_file(62), fr.find_file(63), fr.find_file(64), fr.find_file(65), fr.find_file(75)]
+    df_list = []
+    for csv in csv_list:
+        df_list.append(fr.csv_to_spark_dataframe(csv))
+    gsp.RadarChart.generate(df_list)
+
