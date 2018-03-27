@@ -8,7 +8,6 @@ import pandas as pd
 def get_path_from_id(student_id):
     """
     Get the relative path for a specific student's csv.
-
     :param student_id: ID number of the csv file.
     :return: The path object for the csv file, None if file doesn't exist.
     """
@@ -31,7 +30,6 @@ def get_path_from_id(student_id):
 def get_path_from_filename(filename):
     """
     Get the relative path for a specific student's csv.
-
     :param filename: Full name of the csv file.
     :return: The path object for the csv file, None if file doesn't exist.
     """
@@ -46,7 +44,6 @@ def get_path_from_filename(filename):
 def find_file(identifier):
     """
     Wrapper to find a csv file by either id number or full name of file.
-
     :param identifier: Numerical ID of file or full name of file.
     :return: File path object corresponding to identifier.
     """
@@ -70,20 +67,19 @@ class FilePath(object):
 def csv_to_spark_dataframe(filepath):
     """
     Convert a csv file to a spark dataframe.
-
     :param filepath: File path object of the csv to convert.
-    :return: Spark dataframe.
+    :return: Spark dataframe and the active spark session which was created.
     """
-    spark_context = create_local_spark_session()
-    sql_context = SQLContext(spark_context)
+    sesh = SparkSesh()
+    spark = sesh.get_active_session()
+    sql_context = SQLContext(sparkContext=spark.sparkContext, sparkSession=spark)
     spark_df = sql_context.read.format('com.databricks.spark.csv').options(header='true').load(filepath.path)
-    return spark_df
+    return spark_df, sesh
 
 
 def csv_to_pandas_dataframe(filepath):
     """
     Convert a csv file to a pandas dataframe.
-
     :param filepath: File path object of the csv file to convert.
     :return: Pandas dataframe.
     """

@@ -1,7 +1,7 @@
 import plotly.offline as py
 import plotly.graph_objs as go
-import pyspark.sql as psql
 import time
+import datetime
 
 EMOTIONS = {'Neutral': '#000000',
             'Happy': '#F9E03D',
@@ -65,7 +65,7 @@ class RadarChart(object):
         :return: Layout for radar chart.
         """
         layout = go.Layout(
-            polar = dict(
+            polar=dict(
                 radialaxis=dict(
                     visible=True,
                     range=[0, range_max]
@@ -76,83 +76,53 @@ class RadarChart(object):
         return layout
 
 
-# class SinglePlot(object):
-#     """
-#     Class for plotting all emotions for a single participant on the same graph.
-#     """
-#
-#     @staticmethod
-#     def avg_radar_chart(df, filename):
-#         my_r = []
-#         my_theta = []
-#         for emo, colr in EMOTIONS.items():
-#             my_theta.append(emo)
-#             col_avg = df.agg({emo.lower(): 'avg'}).collect()[0][0]
-#             my_r.append(col_avg)
-#
-#         data = [go.Scatterpolar(
-#             r=my_r,
-#             theta=my_theta,
-#             fill='toself'
-#         )]
-#
-#         lay = go.Layout(
-#             polar=dict(
-#                 radialaxis=dict(
-#                     visible=True,
-#                     range=[min(my_r), max(my_r)]
-#                 )
-#             ),
-#             showlegend=False
-#         )
-#
-#         fig = go.Figure(data=data, layout=lay)
-#         py.plot(fig, filename='plots/' + filename + str(time.time()))
-#
-#     @staticmethod
-#     def histogram_stacked(*cols):
-#         """
-#         Plot a histogram with stacked traces using plotly API.
-#
-#         :param cols: Variadic parameter to pass in columns for traces.
-#         :return: Possibly return HTML file from plotly offline.
-#         """
-#         data = []
-#         for c in cols:
-#             temp_trace = go.Histogram(x=c)
-#             data.append(temp_trace)
-#         layout = go.Layout(barmode='stack')
-#         fig = go.Figure(data=data, layout=layout)
-#         py.plot(fig, filename='emoviz stacked histogram')
-#
-#     @staticmethod
-#     def line_graph(df, name):
-#         data = []
-#         for emotion, color in EMOTIONS.items():
-#             trace = go.Scatter(x=df.time,
-#                                y=df[emotion.lower()],
-#                                name=emotion,
-#                                line=dict(color=color))
-#             trace_avg = go.Scatter(x=df.time,
-#                                    y=[df.agg({emotion.lower(): 'avg'})] * df.count(),
-#                                    name=emotion + ' Average',
-#                                    visible=False,
-#                                    line=dict(color=color, dash='dash'))
-#             data.append(trace)
-#             data.append(trace_avg)
-#
-#         updatemenus = list([
-#             dict(type='buttons',
-#                  active=-1,
-#                  buttons=list([
-#                      dict(label='Neutral',
-#                           method='update',
-#                           args=[{'visible': [True]},
-#                                 {'title': 'Neutral High'}])
-#                  ]),
-#                  )
-#         ])
-#
-#         layout = dict(title=name, showlegend=False, updatemenus=updatemenus)
-#         fig = dict(data=data, layout=layout)
-#         py.plot(fig, filename='update_button')
+class HeatMap(object):
+    """
+    Heat map visualization based on each timestamp -> https://plot.ly/python/heatmaps/
+    """
+
+    @staticmethod
+    def generate(single_df):
+        """
+        Generate a heat map of emotions by time .
+        :param single_df: Dataframe to operate on.
+        :return: HTML file of offline radar chart.
+        """
+        data = HeatMap.build_data_traces(single_df)
+        layout = HeatMap.build_layout(single_df.count())
+        fig = go.Figure(data=data, layout=layout)
+        return py.plot(fig, filename='plots/heatmap_single_'+str(time.time())+'.html')
+
+    @staticmethod
+    def build_data_traces(df):
+        """
+        Build data traces for heat map.
+        :param df: Dataframe to operate on.
+        :return: Data list to place in heatmap.
+        """
+        value_map = []
+        for emotion, color in EMOTIONS.items():
+            col = df.select(emotion.lower()).rdd.flatMap(lambda x: x).collect()
+            value_map.append(col)
+        time_list = df.select('time').rdd.flatMap(lambda x: x).collect()
+        data = [go.Heatmap(
+            z=value_map,
+            x=time_list,
+            y=list(EMOTIONS.keys()),
+            colorscale='Jet'
+        )]
+        return data
+
+    @staticmethod
+    def build_layout(num_ticks):
+        """
+        Build layout for heat map.
+        :num_ticks: Largest value of all traces for setting range of radial axis.
+        :return: Layout for heat map.
+        """
+        layout = go.Layout(
+            title='Emotions By Millisecond',
+            xaxis=dict(ticks='', nticks=num_ticks/225),  # Divide by 225 to put ~40 ticks on axis, all 9000 don't fit
+            yaxis=dict(ticks='')
+        )
+        return layout

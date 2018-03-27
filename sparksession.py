@@ -22,3 +22,6 @@ class SparkSesh(object):
 
     def __init__(self):
         self.spark_sesh = create_local_spark_session()
+
+    def get_active_session(self):
+        return self.spark_sesh
