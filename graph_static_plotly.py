@@ -82,16 +82,17 @@ class HeatMap(object):
     """
 
     @staticmethod
-    def generate(single_df):
+    def generate(single_df, stnum):
         """
         Generate a heat map of emotions by time .
         :param single_df: Dataframe to operate on.
+        :param stnum: Student ID number for graph naming.
         :return: HTML file of offline radar chart.
         """
         data = HeatMap.build_data_traces(single_df)
-        layout = HeatMap.build_layout(single_df.count())
+        layout = HeatMap.build_layout(single_df.count(), stnum)
         fig = go.Figure(data=data, layout=layout)
-        return py.plot(fig, filename='plots/heatmap_single_'+str(time.time())+'.html')
+        return py.plot(fig, filename='plots/data_'+stnum+'_heatmap_single_'+str(time.time())+'.html')
 
     @staticmethod
     def build_data_traces(df):
@@ -114,15 +115,16 @@ class HeatMap(object):
         return data
 
     @staticmethod
-    def build_layout(num_ticks):
+    def build_layout(num_ticks, stnum):
         """
         Build layout for heat map.
-        :num_ticks: Largest value of all traces for setting range of radial axis.
+        :param num_ticks: Largest value of all traces for setting range of radial axis.
+        :param stnum: Student ID number for graph naming.
         :return: Layout for heat map.
         """
         layout = go.Layout(
-            title='Emotions By Millisecond',
-            xaxis=dict(ticks='', nticks=num_ticks/225),  # Divide by 225 to put ~40 ticks on axis, all 9000 don't fit
-            yaxis=dict(ticks='')
+            title='Student '+stnum+' Emotions By Millisecond',
+            xaxis=dict(ticks='', nticks=num_ticks/225, title='Time'),  # Divide by 225 to put ~40 ticks on axis, all 9000 don't fit
+            yaxis=dict(ticks='', title='Emotion')
         )
         return layout
