@@ -1,5 +1,4 @@
 import os
-from pyspark.sql import SQLContext
 import fnmatch as fn
 from sparksession import *
 import pandas as pd

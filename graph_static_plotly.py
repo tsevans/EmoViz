@@ -1,7 +1,8 @@
 import plotly.offline as py
 import plotly.graph_objs as go
 import time
-import datetime
+import color_utils as cu
+import numpy as np
 
 EMOTIONS = {'Neutral': '#000000',
             'Happy': '#F9E03D',
@@ -28,7 +29,7 @@ class RadarChart(object):
         layout = RadarChart.build_layout(max_r)
         fig = go.Figure(data=data, layout=layout)
         name = 'single' if len(df_list) is 1 else 'multi'
-        return py.plot(fig, filename='plots/radar_'+name+'_'+str(time.time())+'.html')
+        return py.plot(fig, filename='plots/radar_' + name + '_' + str(time.time()) + '.html')
 
     @staticmethod
     def build_data_traces(df_list):
@@ -84,15 +85,15 @@ class HeatMap(object):
     @staticmethod
     def generate(single_df, stnum):
         """
-        Generate a heat map of emotions by time .
+        Generate a heat map of emotions by time.
         :param single_df: Dataframe to operate on.
         :param stnum: Student ID number for graph naming.
-        :return: HTML file of offline radar chart.
+        :return: HTML file of offline heat map.
         """
         data = HeatMap.build_data_traces(single_df)
         layout = HeatMap.build_layout(single_df.count(), stnum)
         fig = go.Figure(data=data, layout=layout)
-        return py.plot(fig, filename='plots/data_'+stnum+'_heatmap_single_'+str(time.time())+'.html')
+        return py.plot(fig, filename='plots/data_' + stnum + '_heatmap_single_' + str(time.time()) + '.html')
 
     @staticmethod
     def build_data_traces(df):
@@ -123,8 +124,75 @@ class HeatMap(object):
         :return: Layout for heat map.
         """
         layout = go.Layout(
-            title='Student '+stnum+' Emotions By Millisecond',
-            xaxis=dict(ticks='', nticks=num_ticks/225, title='Time'),  # Divide by 225 to put ~40 ticks on axis, all 9000 don't fit
+            title='Student ' + stnum + ' Emotions By Millisecond',
+            xaxis=dict(ticks='', nticks=num_ticks / 225, title='Time'),
+            # Divide by 225 to put ~40 ticks on axis, all 9000 don't fit
             yaxis=dict(ticks='', title='Emotion')
+        )
+        return layout
+
+
+class RibbonPlot(object):
+    """
+    Three-dimensional ribbon plot visualization -> https://plot.ly/python/ribbon-plots/
+    """
+
+    @staticmethod
+    def generate(single_df, stnum):
+        """
+        Generate a ribbon plot of emotions by time.
+        :param single_df: Dataframe to operate on.
+        :param stnum: Student ID number for graph naming.
+        :return: HTML file of offline heat map.
+        """
+        data_traces = RibbonPlot.build_data_traces(single_df)
+        lay = RibbonPlot.build_layout(stnum)
+        fig = {'data': data_traces, 'layout': lay}
+        return py.plot(fig, filename='plots/data_' + stnum + '_ribbonplot_single_' + str(time.time()) + '.html')
+
+    @staticmethod
+    def build_data_traces(df):
+        """
+        Build data traces for ribbon plot.
+        :param df: Data frame to operate on.
+        :return: Data list to place in ribbon plot.
+        """
+        traces = []
+        time_list = df.select('time').rdd.flatMap(lambda x: x).collect()
+        index_count = 1
+        for emotion, color in EMOTIONS.items():
+            x = []
+            y = time_list
+            z = []
+            col = df.select(emotion.lower()).rdd.flatMap(lambda x: x).collect()
+            for i in range(0, len(col)):
+                z.append([col[i], col[i]])
+                x.append([index_count * 2, index_count * 2 + 1])
+            index_count += 1
+            traces.append(dict(
+                z=z,
+                x=x,
+                y=y,
+                colorscale=[[j, cu.hex_to_rgb(color)] for j in np.arange(0, 1.1, 0.1)],
+                showscale=False,
+                type='surface',
+                name=emotion
+            ))
+        return traces
+
+    @staticmethod
+    def build_layout(stnum):
+        """
+        Build layout for ribbon plot.
+        :param stnum: Student ID number for graph naming.
+        :return: Layout for ribbon plot.
+        """
+        layout = go.Layout(
+            title='Ribbon Plot of Emotions by Time for Student' + str(stnum),
+            scene=go.Scene(
+                xaxis=dict(title='Emotions'),
+                yaxis=dict(title='Time'),
+                zaxis=dict(title='Emotion Value')
+            )
         )
         return layout

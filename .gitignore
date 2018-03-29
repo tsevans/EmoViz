@@ -4,3 +4,4 @@ derby.log
 metastore_db/*
 venv/*
 plots/*
+examples/*
