@@ -35,6 +35,7 @@ class Neutral(Emotion):
         return 1
 
 
+# TODO: Add colors
 class Happy(Emotion):
 
     def name(cls):
@@ -49,7 +50,7 @@ class Happy(Emotion):
     def index(cls):
         return 2
 
-
+# TODO: Add colors
 class Sad(Emotion):
     def name(cls):
         return 'Sad'
@@ -64,6 +65,7 @@ class Sad(Emotion):
         return 3
 
 
+# TODO: Add colors
 class Angry(Emotion):
     def name(cls):
         return 'Angry'
@@ -78,6 +80,7 @@ class Angry(Emotion):
         return 4
 
 
+# TODO: Add colors
 class Surprise(Emotion):
     def name(cls):
         return 'Surprise'
@@ -92,6 +95,7 @@ class Surprise(Emotion):
         return 5
 
 
+# TODO: Add colors
 class Scared(Emotion):
     def name(cls):
         return 'Scared'
@@ -106,6 +110,7 @@ class Scared(Emotion):
         return 6
 
 
+# TODO: Add colors
 class Disgust(Emotion):
     def name(cls):
         return 'Disgust'
