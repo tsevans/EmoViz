@@ -14,6 +14,7 @@ def create_local_spark_session():
         num_cores = mp.cpu_count()
     except NotImplementedError:
         num_cores = None
+    print('Using ' + str(num_cores) + ' cores')
     master = 'local' if num_cores is None else 'local[{0}]'.format(num_cores)
     return SS.builder.master(master).config(conf=SparkConf()).appName('EmoViz').getOrCreate()
 

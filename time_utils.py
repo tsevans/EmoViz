@@ -20,8 +20,10 @@ def compose_timestamp(min, sec, millis):
     """
     # Minute formatting
     if min > 9:
+        pass
         # Handle double-digit stuff here
     else:
+        pass
         # Just format single digit stuff
 
 

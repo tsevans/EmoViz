@@ -1,6 +1,5 @@
 import filereader as fr
 import graph_static_plotly as gsp
-import color_utils as cu
 
 
 if __name__ == '__main__':
