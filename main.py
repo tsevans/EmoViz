@@ -24,3 +24,4 @@ if __name__ == '__main__':
     rib_test_df, spark_session = fr.csv_to_spark_dataframe(rib_test_csv)
     gsp.RibbonPlot.generate(rib_test_df, str(id))
     spark_session.get_active_session().stop()
+
