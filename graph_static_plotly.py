@@ -125,8 +125,8 @@ class HeatMap(object):
         """
         layout = go.Layout(
             title='Student ' + stnum + ' Emotions By Millisecond',
-            xaxis=dict(ticks='', nticks=num_ticks / 225, title='Time'),
             # Divide by 225 to put ~40 ticks on axis, all 9000 don't fit
+            xaxis=dict(ticks='', nticks=num_ticks / 225, title='Time'),
             yaxis=dict(ticks='', title='Emotion')
         )
         return layout

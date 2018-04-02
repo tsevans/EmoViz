@@ -63,26 +63,26 @@ class FilePath(object):
         self.is_adjusted = adjusted
 
 
-def csv_to_spark_dataframe(filepath):
+def csv_to_spark_dataframe(file_path):
     """
     Convert a csv file to a spark dataframe.
-    :param filepath: File path object of the csv to convert.
+    :param file_path: File path object of the csv to convert.
     :return: Spark dataframe and the active spark session which was created.
     """
     sesh = SparkSesh()
     spark = sesh.get_active_session()
     sql_context = SQLContext(sparkContext=spark.sparkContext, sparkSession=spark)
-    spark_df = sql_context.read.format('com.databricks.spark.csv').options(header='true').load(filepath.path)
+    spark_df = sql_context.read.format('com.databricks.spark.csv').options(header='true').load(file_path.path)
     return spark_df, sesh
 
 
-def csv_to_pandas_dataframe(filepath):
+def csv_to_pandas_dataframe(file_path):
     """
     Convert a csv file to a pandas dataframe.
-    :param filepath: File path object of the csv file to convert.
+    :param file_path: File path object of the csv file to convert.
     :return: Pandas dataframe.
     """
-    pandas_df = pd.read_csv(filepath.path)
+    pandas_df = pd.read_csv(file_path.path)
     return pandas_df
 
 
