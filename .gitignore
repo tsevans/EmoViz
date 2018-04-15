@@ -6,3 +6,4 @@ metastore_db/*
 venv/*
 plots/*
 examples/*
+*.pyc
