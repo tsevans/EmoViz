@@ -3,7 +3,7 @@ import plotly.offline as ply
 import pandas as pd
 import plotly.figure_factory as FF
 
-#read data
+#read data_raw
 df =pd.read_csv('P01 AR Emotion by millisecond.csv')
 
 data_table=FF.create_table(df.head())
