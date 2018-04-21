@@ -34,7 +34,7 @@ class RadarChart(object):
     @staticmethod
     def build_data_traces(df_list):
         """
-        Build data traces for radar chart.
+        Build data_raw traces for radar chart.
         :param df_list: List of dataframes to operate on.
         :return: Data list of traces and max value for layout range.
         """
@@ -98,7 +98,7 @@ class HeatMap(object):
     @staticmethod
     def build_data_traces(df):
         """
-        Build data traces for heat map.
+        Build data_raw traces for heat map.
         :param df: Dataframe to operate on.
         :return: Data list to place in heatmap.
         """
@@ -147,13 +147,13 @@ class RibbonPlot(object):
         """
         data_traces = RibbonPlot.build_data_traces(single_df)
         lay = RibbonPlot.build_layout(stnum)
-        fig = {'data': data_traces, 'layout': lay}
+        fig = {'data_raw': data_traces, 'layout': lay}
         return py.plot(fig, filename='plots/data_' + stnum + '_ribbonplot_single_' + str(time.time()) + '.html')
 
     @staticmethod
     def build_data_traces(df):
         """
-        Build data traces for ribbon plot.
+        Build data_raw traces for ribbon plot.
         :param df: Data frame to operate on.
         :return: Data list to place in ribbon plot.
         """
