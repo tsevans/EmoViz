@@ -34,6 +34,17 @@ def write(csv_rec):
     Write CsvRecord to database, using its name as the key.
     :param csv_rec: CsvRecord object to write to database.
     """
+    csv_rec.rename()
+
+    # Save file to data_proc/ directory
+    with open(csv_rec.path_unprocessed) as f:
+        lines = f.readlines()
+        lines = [l for l in lines]
+        with open(csv_rec.path_processed, "w") as f1:
+            f1.writelines(lines)
+    # temp_file = open(csv_rec.name, 'w+')
+    # temp_file.close()
+
     db = shelve.open('csv_index.dat')
     key = str(csv_rec.id_number)
     db[key] = csv_rec
@@ -61,11 +72,19 @@ def fill():
     # Wipe database before refilling it in order to avoid collisions.
     wipe()
     for filename in os.listdir('data_raw/'):
-        id_number = int(filter(str.isdigit, filename))
         if 'Adjusted' in filename:
-            processed = cp.CsvRecord(id_number, filename)
+            processed = cp.CsvRecord(filename)
             # TODO: Need to actually process file with adjustments, this also means writing it to data_proc/
         else:
-            processed = cp.CsvRecord(id_number, filename, True)
-        processed.rename()
+            processed = cp.CsvRecord(filename, True)
         write(processed)
+
+
+if __name__ == '__main__':
+    wipe()
+    rec = cp.CsvRecord("P01_Emotion.csv", True)
+    write(rec)
+    copy = read(1)
+    print(copy.name)
+    print(copy.id_number)
+    print(copy.is_processed)
