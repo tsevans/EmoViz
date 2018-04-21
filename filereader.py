@@ -44,24 +44,6 @@ def get_path_from_filename(filename, location=None):
     return None
 
 
-def check_fast_path(key):
-    """
-
-    :param key:
-    :return:
-    """
-    if type(key) is not int:
-        # Parse int from filename if provided key was file name (and not number)
-        key = int(filter(str.isdigit, key))
-    print(str(key))
-    if db.contains(key):
-        return db.read(key)
-    return None
-
-def check_slow_path():
-    pass
-
-
 def find_file(identifier, dir_name=None):
     """
     Wrapper to find a csv file by either id number or full name of file
@@ -84,17 +66,6 @@ def find_file(identifier, dir_name=None):
     return path
 
 
-def find_file_fast(identifier):
-    """
-    Wrapper to find a csv file from the local processed index as the fast path.
-    :param identifier: Full name of file to use as key.
-    :return: Processed CsvRecord object from local index, None if not found in index.
-    """
-    if db.contains(identifier):
-        return db.read(identifier)
-    return None
-
-
 class FilePath(object):
     """ Class to represent path for student data_raw file"""
     def __init__(self, path, adjusted=False):
@@ -102,28 +73,49 @@ class FilePath(object):
         self.is_adjusted = adjusted
 
 
-def csv_to_spark_dataframe(file_path):
+def check_fast_path(key):
     """
-    Convert a csv file to a spark dataframe.
-    :param file_path: File path object of the csv to convert.
-    :return: Spark dataframe and the active spark session which was created.
+    Checks shelf database for already processed CsvRecord object.
+    :param key: Key to access file,
+    :return:
     """
-    sesh = SparkSesh()
-    spark = sesh.get_active_session()
-    sql_context = SQLContext(sparkContext=spark.sparkContext, sparkSession=spark)
-    spark_df = sql_context.read.format('com.databricks.spark.csv').options(header='true').load(file_path.path)
-    return spark_df, sesh
+    print('Checking fast path for file ' + str(key) + ' in local processed index.')
+    if type(key) is not int:
+        # Parse int from filename if provided key was file name (and not number)
+        key = int(filter(str.isdigit, key))
+    if db.contains(key):
+        print('File was found in fast path!')
+        return db.read(key)
+    print('File not found in fast path.')
+    return None
+
+
+def check_slow_path(key):
+    """
+    Checks data_raw/ directory for path to unprocessed file.
+    :param key: Key to find file.
+    :return:
+    """
+    print('Checking slow path for file ' + str(key) + ' in unprocessed directory.')
+    file_path = find_file(key)
 
 
 def load_dataframes(file_id):
     """
     Loads csv file(s) as spark dataframe(s).
     :param file_id: Single file reference or list of file references - either name or number.
-    :return: Spark dataframe(s) from provided files.
+    :return: Spark dataframe(s) from provided files and session that created them.
     """
-    record = find_file_fast(file_id)
-    if record is None:
-        record = find_file(file_id)
-        # TODO: Process file and add it to local index
+    # Create single instance of spark session used to process all files.
+    sesh = SparkSesh()
 
-    pass
+    frames = []
+
+    # Loop over each file that will be included in the visualization
+    for ref in file_id:
+        record = check_fast_path(ref)
+        if record is None:
+            record = check_slow_path(ref)
+        curr_frame = csv_to_spark_dataframe(record)
+        frames.append(curr_frame)
+    return frames, sesh

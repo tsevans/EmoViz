@@ -4,6 +4,19 @@ from pyspark.sql import SQLContext
 import multiprocessing as mp
 
 
+def csv_to_spark_dataframe(file_path, sesh):
+    """
+    Convert a csv file to a spark dataframe.
+    :param file_path: File path object of the csv to convert.
+    :param sesh: Spark session created for all conversions.
+    :return: Spark dataframe created from the file.
+    """
+    spark = sesh.get_active_session()
+    sql_context = SQLContext(sparkContext=spark.sparkContext, sparkSession=spark)
+    spark_df = sql_context.read.format('com.databricks.spark.csv').options(header='true').load(file_path.path)
+    return spark_df
+
+
 def create_local_spark_session():
     """
     Create a spark session that runs on local machine, using all available cores if possible.
