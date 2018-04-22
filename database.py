@@ -74,6 +74,7 @@ def fill():
     for filename in os.listdir('data_raw/'):
         if 'Adjusted' in filename:
             processed = cp.CsvRecord(filename)
+            processed.fix_adjustments()
             # TODO: Need to actually process file with adjustments, this also means writing it to data_proc/
         else:
             processed = cp.CsvRecord(filename, True)

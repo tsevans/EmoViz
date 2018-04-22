@@ -18,9 +18,15 @@ class CsvRecord(object):
         prefix = 'data_proc/' if self.is_processed else ''
         self.path_processed = prefix + self.name
 
+    def get_path(self):
+        if self.is_processed:
+            return self.path_processed
+        else:
+            return self.path_unprocessed
+
     def fix_adjustments(self):
         csv_file = fr.get_path_from_filename(self.name)
 
-        # TODO: actually do the adjustements of the file here, probably using time uitls
+        # TODO: actually do the adjustements of the file (need to read and write lines, and use time utils)
 
         self.is_processed = True
