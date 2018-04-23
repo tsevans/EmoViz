@@ -56,7 +56,8 @@
     <body>
     	<?php
 			$fileName = $plotType = $execCall = "";
-			$fileCount = $errorFlag = 0;
+			$fileCount = 0;
+			$errorFlag = -1;
 			
 			if ($_SERVER["REQUEST_METHOD"] == "POST") {
 				
@@ -80,6 +81,7 @@
 					if ($plotType == 'Radar') {
 						if ($fileCount <= 5) {
 							$execCall .= ' ' . $plotType;
+							$errorFlag = 0;
 						} else {
 							$execCall = "You have selected too many data files for the Radar Visualization. Please select 1-5 data files and try again.";
 							$errorFlag = 1;
@@ -87,6 +89,7 @@
 					} elseif ($plotType == 'Heat Map') {
 						if ($fileCount == 1) {
 							$execCall .= ' ' . $plotType;
+							$errorFlag = 0;
 						} else {
 							$execCall = "You have selected too many data files for the Heat Map. Please select 1 data file and try again.";
 							$errorFlag = 1;
@@ -94,11 +97,17 @@
 					} else {
 						if ($fileCount == 1) {
 							$execCall .= ' ' . $plotType;
+							$errorFlag = 0;
 						} else {
 							$execCall = "You have selected too many data files for the Ribbon Visualization. Please select 1 data file and try again.";
 							$errorFlag = 1;
 						}
 					}
+				}
+				
+				if ($errorFlag == 0) {
+					$send = "python testPy.py " . $execCall;
+					exec($send);
 				}
 			}
 			
@@ -203,7 +212,11 @@
 							echo "<br>";
 							echo 'Plot type: ' . $plotType;
 							echo "<br>";
-							echo "Terminal command: " . $execCall;
+							echo "Terminal command: ";
+							if ($errorFlag == 0) {
+								echo "python testPy.py ";
+							}
+							echo $execCall;
 							echo "<br>";
 							echo "Error flag: " . $errorFlag;
 							echo "<br>";
