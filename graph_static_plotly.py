@@ -13,6 +13,47 @@ EMOTIONS = {'Neutral': '#000000',
             'Disgust': '#5B4A14'}
 
 
+class LineGraph(object):
+    """
+
+    """
+
+    @staticmethod
+    def generate(df_list):
+        """
+
+        :param df_list:
+        :return:
+        """
+        pass
+
+    @staticmethod
+    def build_data_traces(df_list):
+        """
+
+        :param df_list:
+        :return:
+        """
+        pass
+
+    @staticmethod
+    def build_layout(stnum):
+        """
+
+        :param stnum:
+        :return:
+        """
+        pass
+
+    @staticmethod
+    def add_buttons():
+        """
+
+        :return:
+        """
+        pass
+
+
 class RadarChart(object):
     """
     Radar chart visualization based on average values -> https://plot.ly/python/radar-chart/
