@@ -190,7 +190,8 @@
 											$checked = " checked";
 										}
 									}
-									echo '<input type="checkbox" name="fileName[]" value="' . $value . '"' . $checked .'>' . $value . '<br />';
+									//echo '<input type="checkbox" name="fileName[]" value="' . $value . '"' . $checked .'>' . $value . '<br />';
+									echo '<label class="check_contain">' . $value . '<input type="checkbox" name="fileName[]" value="' . $value . '"' . $checked .'><span class="checkmark"></span></label>';
 								} 
                       		}				
 
@@ -226,15 +227,15 @@
             </div>
                 <div class="graph-choice">
                     <!--<h4 class="value-heading"><a href="#" onclick="reset_plots()">Line</a></h4>-->
-                    <input type="radio" name="plotType" <?php if (isset($plotType) && $plotType=="Radar") echo "checked";?> value="Radar" class="button-primary" style="margin: 0;">Radar
+                    <label class="control control--radio">Radar<input type="radio" name="plotType" <?php if (isset($plotType) && $plotType=="Radar") echo "checked";?> value="Radar" class="button-primary" style="margin: 0;"><span class="control__indicator"></span></label>
             	</div>
                 <div class="graph-choice">
                     <!--<h4 class="value-heading"><a href="#" onclick="reset_plots()">Radar</a></h4>-->
-                    <input type="radio" name="plotType" <?php if (isset($plotType) && $plotType=="Heat Map") echo "checked";?> value="Heat Map" class="button-primary" style="margin: 0;">Heat Map
+                    <label class="control control--radio">Heat Map<input type="radio" name="plotType" <?php if (isset($plotType) && $plotType=="Heat Map") echo "checked";?> value="Heat Map" class="button-primary" style="margin: 0;"><span class="control__indicator"></span></label>
             	</div>
                 <div class="graph-choice">
                     <!--<h4 class="value-heading"><a href="#" onclick="reset_plots()">Ribbon</a></h4>-->
-                    <input type="radio" name="plotType" <?php if (isset($plotType) && $plotType=="Ribbon") echo "checked";?> value="Ribbon" class="button-primary" style="margin: 0;">Ribbon
+                    <label class="control control--radio">Ribbon<input type="radio" name="plotType" <?php if (isset($plotType) && $plotType=="Ribbon") echo "checked";?> value="Ribbon" class="button-primary" style="margin: 0;"><span class="control__indicator"></span></label>
             	</div>
                 <input type="submit" name="submit" value="Generate" class="generate" style="color: green; padding: 5px 5px 0 8px;">
                 <!--<div class="generate">
