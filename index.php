@@ -32,8 +32,8 @@
                                          
         <script type="text/javascript">
 			function load_plot() {
-				var php = "<" + "?" + "php printNameType();?>";
-     			document.getElementById("plot-content").innerHTML= php + '<object type="text/html" data="radar_multi_1522708451.227119.html" style="height:100%; width:100%;" ></object>';
+     			document.getElementById("plot-content").innerHTML = '<object type="text/html" data="radar_multi_1522264764.96.html" style="height:100%; width:100%;" ></object>';
+				alert(1);
 			}
 			function reset_plots() {
      			document.getElementById("plot-content").innerHTML='&nbsp;';
@@ -118,35 +118,6 @@
         <div style="height: 10px; background-color: #01c6da; line-height: 10px;" >
         	&nbsp;
         </div>
-        	<!--<img src="images/nav-logo1-white2.png" alt="EmoViz" height="120" width ="121">
-            <div style="float: right; width: 130px;">
-            	&nbsp;
-            </div>
-            <div class="nav-filters">
-                    <h4 class="value-heading"><a href="#" onclick="reset_plots()">Disgust</a></h4>
-            </div>
-            <div class="nav-filters">
-                    <h4 class="value-heading"><a href="#" onclick="reset_plots()">Scared</a></h4>
-            </div>
-            <div class="nav-filters">
-                    <h4 class="value-heading"><a href="#" onclick="reset_plots()">Surprise</a></h4>
-            </div>
-            <div class="nav-filters">
-                    <h4 class="value-heading"><a href="#" onclick="reset_plots()">Anger</a></h4>
-            </div>
-            <div class="nav-filters">
-                    <h4 class="value-heading"><a href="#" onclick="reset_plots()">Sad</a></h4>
-            </div>
-            <div class="nav-filters">
-                    <h4 class="value-heading"><a href="#" onclick="reset_plots()">Happy</a></h4>
-            </div>
-            <div class="nav-filters">
-                    <h4 class="value-heading"><a href="#" onclick="reset_plots()">Neutral</a></h4>
-            </div>
-            <div class="nav-filters">
-                    <h4 class="value-heading"><a href="#" onclick="reset_plots()">All</a></h4>
-            </div>
-        </div>-->
         
 		<div style="height: 98.8vh; width: 121px; background-color: #ffb86b; float: left; margin-top: 0px;">
         	<img src="images/nav-logo1-white2.png" alt="EmoViz" height="120" width ="121">
@@ -160,16 +131,6 @@
                     <!--<h3 class="section-heading">Data:</h3>-->
                     <div id="data-content" style="overflow: auto; height: 75vh; width: 100%">
                     Select at least one data file below: <br /><br />
-                    	<!--<ul>
-                    		<a href="" class="li-hover"><li>P01_Emotion.csv</li></a>
-                            <a href="" class="li-hover"><li>P02_Emotion.csv</li></a>
-                            <a href="" class="li-hover"><li>P03_Emotion.csv</li></a>
-                            <a href="" class="li-hover"><li>P04_Emotion.csv</li></a>
-                            <a href="" class="li-hover"><li>P05_Emotion.csv</li></a>
-                            <a href="" class="li-hover"><li>P06_Emotion.csv</li></a>
-                            <a href="" class="li-hover"><li>P07_Emotion.csv</li></a>
-                            <a href="" class="li-hover"><li style="border: 0;">P08_Emotion.csv</li></a>
-                    	</ul>-->
                         <?php
 							$log_directory = 'data_proc/';
                             $results_array = array();
@@ -204,7 +165,27 @@
                     <div id="plot-content" style="height: 75vh; width: 100%">
                     
         				<?php
-							echo "<h2>Your Input:</h2> Files: ";
+						if ($errorFlag == 0) {
+							libxml_use_internal_errors(true);
+							$doc = new DOMDocument();
+							$doc->loadHTMLFile("plots/radar_multi_1522264764.96.html");
+							echo '<p style="position: fixed; z-index: 2000;">';
+							echo 'Files: ';
+							if ($fileName != NULL) {
+								foreach($fileName as $value1) {
+									echo $value1 . ' ';
+								}
+							}
+							echo '<br />Plot type: ' . $plotType;
+							echo '</p>';
+							echo $doc->saveHTML();
+						} elseif ($errorFlag == 1) {
+							echo '<h2 style="color: red;">Error: ' . $execCall . '</h2>';
+						} else {
+							echo '<h2>Please select data files to visualize.</h2>';
+						}
+
+							/*echo "<h2>Your Input:</h2> Files: ";
 							if ($fileName != NULL) {
 								foreach($fileName as $value1) {
 									echo $value1 . ' ';
@@ -220,7 +201,7 @@
 							echo $execCall;
 							echo "<br>";
 							echo "Error flag: " . $errorFlag;
-							echo "<br>";
+							echo "<br>";*/
 						?>    
                     </div>
                 </div>
