@@ -4,6 +4,7 @@ import platform
 
 
 if __name__ == '__main__':
+
     pass
     # run_job()
 
@@ -23,7 +24,7 @@ def run_job(keys, viz_type):
         # Run windows methods
         pass
     else:
-        print('Error, operating system not recognized')
+        print('Error: operating system not recognized')
 
 
 def acquire_files_linux(keys):

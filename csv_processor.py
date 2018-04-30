@@ -1,4 +1,4 @@
-import csv
+import pandas as pd
 import time_utils as tm
 import filereader as fr
 
@@ -25,8 +25,35 @@ class CsvRecord(object):
             return self.path_unprocessed
 
     def fix_adjustments(self):
-        csv_file = fr.get_path_from_filename(self.name)
+        """
+        Fix adjusted file such that timestamps start at 0 time.
+        """
+        def make_timestamps():
+            """
+            Build a list of new timestamps to based on adjusted columns.
+            :return: List of normalized timestamps.
+            """
+            f = open(self.path_unprocessed, 'r')
+            header = False
+            stamps = []
+            for ln in f.readlines():
+                if not header:
+                    header = True
+                    continue
+                row_vals = ln.split(',')
+                stamps.append(tm.compose_timestamp(row_vals[13], row_vals[14], row_vals[15]))
+            f.close()
+            return stamps
 
+        if self.is_processed:
+            return
+
+        stamps = make_timestamps()
+        f = pd.read_csv(self.get_path())
         # TODO: actually do the adjustements of the file (need to read and write lines, and use time utils)
 
         self.is_processed = True
+
+
+if __name__ == '__main__':
+    pass
