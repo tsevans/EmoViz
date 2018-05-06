@@ -8,3 +8,4 @@ venv/*
 plots/*
 examples/*
 *.pyc
+data/*
