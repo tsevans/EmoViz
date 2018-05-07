@@ -60,7 +60,7 @@ class RadarChart(object):
     """
 
     @staticmethod
-    def generate(df_list):
+    def generate(df_list, nums):
         """
         Generate a radar chart of emotions average for each file in df_list.
         :param df_list: List of dataframes to operate on.
@@ -69,8 +69,10 @@ class RadarChart(object):
         data, max_r = RadarChart.build_data_traces(df_list)
         layout = RadarChart.build_layout(max_r)
         fig = go.Figure(data=data, layout=layout)
-        name = 'single' if len(df_list) is 1 else 'multi'
-        return py.plot(fig, filename='plots/radar_' + name + '_' + str(time.time()) + '.html')
+        name = ''
+        for num in nums:
+            name += str(num[0]) + '-'
+        return py.plot(fig, filename='plots/RAD_' + name[:-1] + '.html', auto_open=False)
 
     @staticmethod
     def build_data_traces(df_list):

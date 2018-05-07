@@ -13,7 +13,7 @@ def csv_to_spark_dataframe(file_path, sesh):
     """
     spark = sesh.get_active_session()
     sql_context = SQLContext(sparkContext=spark.sparkContext, sparkSession=spark)
-    spark_df = sql_context.read.format('com.databricks.spark.csv').options(header='true').load(file_path.path)
+    spark_df = sql_context.read.format('com.databricks.spark.csv').options(header='true').load(file_path)
     return spark_df
 
 

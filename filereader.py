@@ -113,9 +113,10 @@ def load_dataframes(file_id):
 
     # Loop over each file that will be included in the visualization
     for ref in file_id:
-        record = check_fast_path(ref)
-        if record is None:
-            record = check_slow_path(ref)
-        curr_frame = csv_to_spark_dataframe(record)
+        # record = check_fast_path(ref)
+        # if record is None:
+        #     record = check_slow_path(ref)
+        record = 'data_proc/' + ref
+        curr_frame = csv_to_spark_dataframe(record, sesh)
         frames.append(curr_frame)
     return frames, sesh

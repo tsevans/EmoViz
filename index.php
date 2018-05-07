@@ -131,7 +131,7 @@
 				
 				if ($errorFlag == 0) {
 					$vizName = '' . $plotCode . '_' . $nums . '.html';
-					$send = "python testPy.py " . $execCall;
+					$send = "python main.py " . $execCall;
 					exec($send);
 				}
 			}

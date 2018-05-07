@@ -1,11 +1,18 @@
 import filereader as fr
 import sys
 import graph_static_plotly as gsp
+import re
 
 
-def delegate_visualization(viz_type):
+def run_job(keys, viz_type):
+    dataframes, spark_session = fr.load_dataframes(keys)
+
+    nums = []
+    for k in keys:
+        nums.append(re.findall(r'\d+', k))
+
     if viz_type == 'RAD':
-        pass
+        gsp.RadarChart.generate(dataframes, nums)
     elif viz_type == 'HMP':
         pass
     elif viz_type == 'RIB':
@@ -17,19 +24,8 @@ def delegate_visualization(viz_type):
         sys.exit(2)
 
 
-def run_job(keys, viz_type):
-    dataframes, spark_session = fr.load_dataframes(keys)
-
-    pass
-
-
 if __name__ == '__main__':
     viz_code = sys.argv[1]
     files = sys.argv[2:]
-    wf = open('out.txt', 'wb')
-    wf.write('Viz type -> ' + viz_code)
-    for f in files:
-        wf.write(('File: ' + f))
-    wf.close()
-    run_job()
+    run_job(files, viz_code)
     sys.exit(0)
