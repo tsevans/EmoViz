@@ -1,31 +1,35 @@
 import filereader as fr
+import sys
 import graph_static_plotly as gsp
-import platform
 
 
-if __name__ == '__main__':
-
-    pass
-    # run_job()
+def delegate_visualization(viz_type):
+    if viz_type == 'RAD':
+        pass
+    elif viz_type == 'HMP':
+        pass
+    elif viz_type == 'RIB':
+        pass
+    elif viz_type == 'LNG':
+        pass
+    else:
+        print('Error: Vizualization type not recognized.')
+        sys.exit(2)
 
 
 def run_job(keys, viz_type):
-    """
-    Run an emoviz job, main execution point of script.
-    :param keys: Single file or list of file keys to
-    :param viz_type:
-    :return:
-    """
-    plat = platform.system()
-    if plat is 'Linux':
-        # Run linux methods
-        pass
-    elif plat is 'Windows':
-        # Run windows methods
-        pass
-    else:
-        print('Error: operating system not recognized')
+    dataframes, spark_session = fr.load_dataframes(keys)
+
+    pass
 
 
-def acquire_files_linux(keys):
-    dataframes = fr.load_dataframes(keys)
+if __name__ == '__main__':
+    viz_code = sys.argv[1]
+    files = sys.argv[2:]
+    wf = open('out.txt', 'wb')
+    wf.write('Viz type -> ' + viz_code)
+    for f in files:
+        wf.write(('File: ' + f))
+    wf.close()
+    run_job()
+    sys.exit(0)
