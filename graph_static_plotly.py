@@ -30,8 +30,8 @@ class LineGraph(object):
     @staticmethod
     def build_data_traces(df_list):
         """
-
-        :param df_list:
+        Build raw data traces for line chart.
+        :param df_list: List of dataframes to operate on.
         :return:
         """
         pass
