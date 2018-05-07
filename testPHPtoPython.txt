@@ -1,1 +1,9 @@
+<<<<<<< HEAD
 testPy.pyRADP37_Emotion_Adjusted.csvP32_Emotion_Adjusted.csv
+=======
+<<<<<<< HEAD
+testPy.pyStudent_1.csvRibbon
+=======
+testPy.pyLNGP32_Emotion_Adjusted.csvP44_Emotion_Adjusted.csv
+>>>>>>> 87af913c8d666946b65b19c1f138109edf4dfcdd
+>>>>>>> 43cad196b3c54b13bcada33c12fb1dd32b890ce3
