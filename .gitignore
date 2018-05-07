@@ -9,3 +9,4 @@ plots/*
 examples/*
 *.pyc
 data/*
+testPHPtoPython.txt

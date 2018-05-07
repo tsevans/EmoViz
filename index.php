@@ -54,10 +54,10 @@
         
     </head>
     <body>
-    <!-- PHP Logic, Setting Variables, and Data Validation 
+    <!-- PHP Logic, Setting Variables, Data Validation, Exec Call to Python
          –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     	<?php
-			$fileName = $plotType = $plotCode = $execCall = "";
+			$fileName = $plotType = $plotCode = $execCall = $vizName = "";
 			$fileCount = 0;
 			$errorFlag = -1;
 			
@@ -118,13 +118,19 @@
 					}
 				}
 				
+				$nums = "";
+				
 				if ($fileName != NULL && $errorFlag == 0) {
 					foreach($fileName as $value1) {
+						$list = explode("_", $value1);
+						$nums .= $list[1] . '-';
 						$execCall .= $value1 . ' ';
 					}
+					$nums = substr($nums, 0, -1);
 				}
 				
 				if ($errorFlag == 0) {
+					$vizName = '' . $plotCode . '_' . $nums . '.html';
 					$send = "python testPy.py " . $execCall;
 					exec($send);
 				}
@@ -164,13 +170,11 @@
 							foreach($results_array as $value) {
 								if ($value != '.' && $value != '..') {
 									$checked = "";
-    								//echo '<a href="" onclick="load_file(' . $value . ')"><li>' . $value . '</li></a>';
 									if ($fileName != NULL) {
 										if (in_array($value, $fileName)) {
 											$checked = " checked";
 										}
 									}
-									//echo '<input type="checkbox" name="fileName[]" value="' . $value . '"' . $checked .'>' . $value . '<br />';
 									echo '<label class="check_contain">' . $value . '<input type="checkbox" name="fileName[]" value="' . $value . '"' . $checked .'><span class="checkmark"></span></label>';
 								} 
                       		}				
@@ -187,7 +191,8 @@
 						if ($errorFlag == 0) {
 							libxml_use_internal_errors(true);
 							$doc = new DOMDocument();
-							$doc->loadHTMLFile("plots/radar_multi_1522264764.96.html");
+							$dir = 'plots/' . $vizName;
+							$doc->loadHTMLFile($dir);
 							echo '<p style="position: fixed; z-index: 2000;">';
 							echo 'Files: ';
 							if ($fileName != NULL) {
@@ -196,7 +201,7 @@
 								}
 							}
 							echo '<br />Plot type: ' . $plotType;
-							echo '<br />Call: ' . $send;
+							//echo '<br />Call: ' . $send;
 							echo '</p>';
 							echo $doc->saveHTML();
 						} elseif ($errorFlag == 1) {
@@ -204,24 +209,6 @@
 						} else {
 							echo '<h2>Please select data files to visualize.</h2>';
 						}
-
-							/*echo "<h2>Your Input:</h2> Files: ";
-							if ($fileName != NULL) {
-								foreach($fileName as $value1) {
-									echo $value1 . ' ';
-								}
-							}
-							echo "<br>";
-							echo 'Plot type: ' . $plotType;
-							echo "<br>";
-							echo "Terminal command: ";
-							if ($errorFlag == 0) {
-								echo "python testPy.py ";
-							}
-							echo $execCall;
-							echo "<br>";
-							echo "Error flag: " . $errorFlag;
-							echo "<br>";*/
 						?>    
                     </div>
                 </div>
